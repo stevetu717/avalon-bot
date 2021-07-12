@@ -16,9 +16,9 @@ const (
 )
 
 const (
-	dateTimeRegexRaw          = `(?i)(0?[1-9]|1[012])[-\/.](0?[1-9]|[12][0-9]|3[01])[-\/.]((?:19|20)\d\d)\s((0[1-9]:[0-5][0-9]((AM)|(PM)))|([1-9]:[0-5][0-9]((AM)|(PM)))|(1[0-2]:[0-5][0-9]((AM)|(PM))))`
+	dateTimeRegexRaw          = `(?i)(0?[1-9]|1[012])[-\/.](0?[1-9]|[12][0-9]|3[01])[-\/.]2[0-9]\s((0[1-9]:[0-5][0-9]((AM)|(PM)))|([1-9]:[0-5][0-9]((AM)|(PM)))|(1[0-2]:[0-5][0-9]((AM)|(PM))))`
 	activityRegexRaw          = `(?i)racquetball|basketball|tennis`
-	ReservationDateTimeLayout = `01/02/2006 3:04pm`
+	ReservationDateTimeLayout = `1/2/06 3:04pm`
 	AvalonBaseUrl             = "https://www.avalonaccess.com"
 	AvalonLoginUrl            = AvalonBaseUrl + "/UserProfile/LogOn"
 	AvalonAmenityUrl          = AvalonBaseUrl + "/Information/Information/AmenityReservation?amenityKey="
