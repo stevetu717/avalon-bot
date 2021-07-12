@@ -1,0 +1,33 @@
+FROM golang:1.16.2-alpine3.13
+
+# Setup bee for hot reloads
+RUN go get -u github.com/beego/bee
+
+# Environment variables for Go
+ENV GO111MODULE=on
+ENV GOFLAGS=-mod=vendor
+ENV APP_USER app
+ENV APP_HOME /go/src/avalon-bot
+
+# Run-time variables for the container
+ENV DB_URI
+
+# Move to working directory /app
+WORKDIR /home/app
+
+# Copy and download dependency using go mod
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
+
+# Copy the code into the container
+COPY . .
+
+# Build the application
+RUN go build -o main .
+
+# Export necessary port
+EXPOSE 8080
+
+# Command to run when starting the container
+CMD ["bee", "./main"]

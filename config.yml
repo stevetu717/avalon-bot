@@ -1,0 +1,29 @@
+twilio:
+  twilioAccountSid:
+  twilioAuthToken:
+  phoneNumber:
+
+avalon:
+  username:
+  password:
+  amenities:
+    racquetball:
+      key: ea434ccd-bdf4-458c-8ae5-d27fbc38ea13
+      name: Racquetball Court
+      id: 6
+    basketball:
+      key: 9ba5844f-fdcf-45ca-af69-1dced734b360
+      name: Basketball Court
+      id: 8
+    tennis:
+      key: 043cb760-1a5f-4c77-848e-799f188a8d0f
+      name: Tennis Court 2
+      id: 9
+  leaseId:
+  personId:
+  reservationName: Steven
+
+mongo:
+  uri:
+
+
