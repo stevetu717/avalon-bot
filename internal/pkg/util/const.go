@@ -6,8 +6,8 @@ const (
 	ReservationError = "Failed to save the reservation. Contact the dev with Rsvp ID: "
 
 	// SMS
-	SmsHelp   = "To use this reservation system please text a message in the format of: <activity> mm/dd/yy hh:mm <am/pm>. " +
-		"Valid activities are racquetball, basketball, and tennis."
+	SmsHelp   = "To use this system please message in the format: <activity> mm/dd/yy hh:mm <am/pm>. Example: tennis 2/12/21 8:00pm. " +
+		"Valid activities: racquetball, basketball, and tennis."
 	SmsInvalidDateTime = "Please enter a date and time in the correct format. Text 'assist' for help."
 	SmsInvalidDateTimeRange = "Amenities are only open between 8AM and 8PM EST. Please try again with a valid time."
 	SmsInvalidActivity = "Please enter a valid activity you would like to schedule. Text 'assist' for help."
