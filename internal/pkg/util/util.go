@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+var Loc, _ = time.LoadLocation("America/New_York")
 var DateTimeRegex = regexp.MustCompile(dateTimeRegexRaw)
 var ActivityRegex = regexp.MustCompile(activityRegexRaw)
 
@@ -48,7 +49,7 @@ func GetDateTimeUTC(input string) (time.Time, error) {
 		return time.Time{}, errors.New("no valid date/time provided")
 	}
 
-	dateTime, err := time.ParseInLocation(ReservationDateTimeLayout, dateTimeString, time.Local)
+	dateTime, err := time.ParseInLocation(ReservationDateTimeLayout, dateTimeString, Loc)
 
 	if err != nil {
 		return time.Time{}, errors.New("Unable to parse datetime: " + input)
@@ -71,15 +72,15 @@ func GetActivity(body string) (string, error) {
 }
 
 func TimeFromNow(datetime time.Time) time.Duration {
-	datetime = datetime.In(time.Local)
+	datetime = datetime.In(Loc)
 	datetime = datetime.AddDate(0, 0, -1)
-	datetime = time.Date(datetime.Year(), datetime.Month(), datetime.Day(), 0, 0, 0, 0, time.Local)
-	d := datetime.Sub(time.Now())
+	datetime = time.Date(datetime.Year(), datetime.Month(), datetime.Day(), 0, 0, 0, 0, Loc)
+	d := datetime.Sub(time.Now().In(Loc))
 	return d
 }
 
 func DateTimeWithinTwoDays(dateTime time.Time) bool {
-	endDate := time.Now().Local().Add(time.Hour * 48)
-	endDate = time.Date(endDate.Year(), endDate.Month(), endDate.Day(), 0, 0, 0, 0, time.Local)
-	return dateTime.Local().Before(endDate)
+	endDate := time.Now().In(Loc).Add(time.Hour * 48)
+	endDate = time.Date(endDate.Year(), endDate.Month(), endDate.Day(), 0, 0, 0, 0, Loc)
+	return dateTime.In(Loc).Before(endDate)
 }

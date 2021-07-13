@@ -91,7 +91,7 @@ func (sms *SMSHandler) handleScheduleSMS(body string, userPhoneNumber string) er
 		err := sms.avalonService.MakeReservation(reservation)
 
 		if err != nil {
-			body := fmt.Sprintf(util.SmsFailedReservation, reservation.Activity, reservation.Datetime.Local().Format(util.ReservationDateTimeLayout))
+			body := fmt.Sprintf(util.SmsFailedReservation, reservation.Activity, reservation.Datetime.In(util.Loc).Format(util.ReservationDateTimeLayout))
 			util.LogError(sms.logger, body)
 			smsErr := sms.sendSMS(body, userPhoneNumber)
 			if smsErr != nil {
@@ -100,7 +100,7 @@ func (sms *SMSHandler) handleScheduleSMS(body string, userPhoneNumber string) er
 			}
 			return err
 		} else {
-			body := fmt.Sprintf(util.SmsSuccessfulReservation, reservation.Activity, reservation.Datetime.Local().Format(util.ReservationDateTimeLayout))
+			body := fmt.Sprintf(util.SmsSuccessfulReservation, reservation.Activity, reservation.Datetime.In(util.Loc).Format(util.ReservationDateTimeLayout))
 			smsErr := sms.sendSMS(body, userPhoneNumber)
 			if smsErr != nil {
 				util.LogSMSError(sms.logger, err, userPhoneNumber, body)
@@ -156,7 +156,7 @@ func (sms *SMSHandler) parseScheduleSMS(body string, userPhoneNumber string) (ti
 			util.LogSMSError(sms.logger, err, userPhoneNumber, util.SmsInvalidDateTimeRange)
 			return time.Time{}, "", smsErr
 		}
-		return time.Time{}, "", errors.New("Invalid time range: " + dateTime.Local().Format("3:04 PM"))
+		return time.Time{}, "", errors.New("Invalid time range: " + dateTime.In(util.Loc).Format("3:04 PM"))
 	}
 
 	activity, err := util.GetActivity(body)
@@ -192,7 +192,7 @@ func (sms *SMSHandler) sendSMS(message string, userPhoneNumber string) error {
 func (sms *SMSHandler) ScheduleJob(r *model.Reservation, collection *mongo.Collection, avalonService *AvalonService) {
 	duration := util.TimeFromNow(r.Datetime)
 	timer := time.NewTimer(duration)
-	util.LogInfo(sms.logger, "Will attempt to make Reservation "+r.Id.Hex()+" on Avalon.com at "+time.Now().Add(duration).String())
+	util.LogInfo(sms.logger, "Will attempt to make Reservation "+r.Id.Hex()+" on Avalon.com at "+time.Now().In(util.Loc).Add(duration).String())
 
 	go func() {
 		<-timer.C
@@ -202,14 +202,14 @@ func (sms *SMSHandler) ScheduleJob(r *model.Reservation, collection *mongo.Colle
 
 		if err != nil {
 			util.LogDebug(sms.logger, "FAIL: Failed to make Reservation on Avalon.com")
-			body := fmt.Sprintf(util.SmsFailedReservation, r.Activity, r.Datetime.Local().Format(util.ReservationDateTimeLayout))
+			body := fmt.Sprintf(util.SmsFailedReservation, r.Activity, r.Datetime.In(util.Loc).Format(util.ReservationDateTimeLayout))
 			err = sms.sendSMS(body, r.CreatedBy)
 			if err != nil {
 				util.LogSMSError(sms.logger, err, r.CreatedBy, body)
 			}
 		} else {
 			util.LogInfo(sms.logger, "SUCCESS: Successfully made Reservation on Avalon.com for reservation:"+r.Id.Hex())
-			body := fmt.Sprintf(util.SmsSuccessfulReservation, r.Activity, r.Datetime.Local().Format(util.ReservationDateTimeLayout))
+			body := fmt.Sprintf(util.SmsSuccessfulReservation, r.Activity, r.Datetime.In(util.Loc).Format(util.ReservationDateTimeLayout))
 			err = sms.sendSMS(body, r.CreatedBy)
 			if err != nil {
 				util.LogSMSError(sms.logger, err, r.CreatedBy, body)

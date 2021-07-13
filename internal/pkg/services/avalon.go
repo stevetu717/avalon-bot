@@ -176,7 +176,7 @@ func (as *AvalonService) getNodes(html string, xPath string) ([]*html.Node, erro
 }
 
 func (as *AvalonService) createPayload(rsvp *model.Reservation, amenity model.Amenity, amenityVerificationToken string) url.Values {
-	rsvpDateTime := rsvp.Datetime.Local()
+	rsvpDateTime := rsvp.Datetime.In(util.Loc)
 	rsvpDate := rsvpDateTime.Format("1/2/2006")
 	minDate := rsvpDateTime.Format("1/2/2006") + " 4:00:00 AM"
 	maxDate := rsvpDateTime.AddDate(0, 0, 1).Format("1/2/2006") + " 4:00:00 AM"
@@ -228,7 +228,7 @@ func (as *AvalonService) submitReservation(session *http.Client, payload url.Val
 
 func (as *AvalonService) validateReservation(rsvp *model.Reservation, session *http.Client) error {
 	confirmed := false
-	rsvpDateTime := rsvp.Datetime.Local()
+	rsvpDateTime := rsvp.Datetime.In(util.Loc)
 	htmlDoc, err := as.getHtmlDoc(session, util.AvalonAmenitiesUrl)
 
 	if err != nil {
