@@ -41,7 +41,7 @@ func LogSMSError(log *logrus.Logger, error interface{}, userPhoneNumber string, 
 	}).Error(error)
 }
 
-func GetDateTime(input string) (time.Time, error) {
+func GetDateTimeUTC(input string) (time.Time, error) {
 	dateTimeString := DateTimeRegex.FindString(input)
 
 	if dateTimeString == "" {

@@ -59,7 +59,7 @@ func main() {
 
 	// Init WebServer
 	serveMux := http.NewServeMux()
-	serveMux.Handle("/", smsService)
+	serveMux.Handle("/sms", smsService)
 
 	http.ListenAndServe(":8080", serveMux)
 }

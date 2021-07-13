@@ -138,7 +138,7 @@ func (sms *SMSHandler) handleScheduleSMS(body string, userPhoneNumber string) er
 }
 
 func (sms *SMSHandler) parseScheduleSMS(body string, userPhoneNumber string) (time.Time, string, error) {
-	dateTime, err := util.GetDateTime(body)
+	dateTime, err := util.GetDateTimeUTC(body)
 
 	if err != nil {
 		util.LogError(sms.logger, err)
