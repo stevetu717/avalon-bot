@@ -15,7 +15,11 @@ avalon:
       key: 9ba5844f-fdcf-45ca-af69-1dced734b360
       name: Basketball Court
       id: 8
-    tennis:
+    tennis1:
+      key: 40af5c05-9c86-463f-94d3-0e3d3c9a4965
+      name: Tennis Court 1 (Waterfront)
+      id: 3
+    tennis2:
       key: 043cb760-1a5f-4c77-848e-799f188a8d0f
       name: Tennis Court 2
       id: 9

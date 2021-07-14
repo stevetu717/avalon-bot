@@ -36,7 +36,10 @@ func (sms *SMSHandler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	util.LogInfo(sms.logger, "From: "+userPhoneNumber)
 	util.LogInfo(sms.logger, "Message: "+body)
 
-	if strings.Contains(body, "racquetball") || strings.Contains(body, "tennis") || strings.Contains(body, "basketball") {
+	if strings.Contains(body, "racquetball") ||
+		strings.Contains(body, "tennis1") ||
+		strings.Contains(body, "tennis2") ||
+		strings.Contains(body, "basketball") {
 		util.LogInfo(sms.logger, "========== BEGIN SCHEDULE WORKFLOW ==========")
 		err := sms.handleScheduleSMS(body, userPhoneNumber)
 		if err != nil {
