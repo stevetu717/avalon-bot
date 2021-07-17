@@ -71,11 +71,19 @@ func GetActivity(body string) (string, error) {
 	return activity, nil
 }
 
-func TimeFromNow(datetime time.Time) time.Duration {
+// Returns the duration until reservations become schedulable
+// i.e. the day before the datetime but with 30 seconds extra to prepare payload
+func DurationUntilSchedulable(datetime time.Time) time.Duration {
 	datetime = datetime.In(Loc)
-	datetime = datetime.AddDate(0, 0, -1)
-	datetime = time.Date(datetime.Year(), datetime.Month(), datetime.Day(), 0, 0, 0, 0, Loc)
+	datetime = datetime.AddDate(0, 0, -2)
+	datetime = time.Date(datetime.Year(), datetime.Month(), datetime.Day(), 23, 59, 30, 0, Loc)
 	d := datetime.Sub(time.Now().In(Loc))
+	return d
+}
+
+func DurationFromNowInLoc(datetime time.Time, Loc *time.Location) time.Duration {
+	now := time.Now().In(Loc)
+	d := datetime.In(Loc).Sub(now)
 	return d
 }
 

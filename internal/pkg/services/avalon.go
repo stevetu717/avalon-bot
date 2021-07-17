@@ -26,7 +26,7 @@ func (as *AvalonService) MakeReservation(r *model.Reservation) error {
 	session := getSession()
 	err := as.login(session)
 	payload, err := as.prepareReservation(r, session)
-	err = as.submitReservation(session, payload)
+	err = as.submitReservation(r, session, payload)
 	err = as.validateReservation(r, session)
 	return err
 }
@@ -205,7 +205,16 @@ func (as *AvalonService) createPayload(rsvp *model.Reservation, amenity model.Am
 	return payload
 }
 
-func (as *AvalonService) submitReservation(session *http.Client, payload url.Values) error {
+func (as *AvalonService) submitReservation(r *model.Reservation, session *http.Client, payload url.Values) error {
+	if !util.DateTimeWithinTwoDays(r.Datetime){
+		tom := time.Now().In(util.Loc).Add(24 * time.Hour)
+		schedulableTime := time.Date(tom.Year(), tom.Month(), tom.Day(), 0, 0, 0, 0, util.Loc)
+		dur := util.DurationFromNowInLoc(schedulableTime, util.Loc)
+		util.LogInfo(as.Logger, "Sleeping for "+string(dur.Milliseconds())+" milliseconds...")
+		time.Sleep(dur)
+	}
+
+	util.LogInfo(as.Logger, "Making reservation request for " + r.CreatedBy + " activity: " + r.Activity)
 	response, err := session.Post(util.AvalonSaveReservationUrl, "application/x-www-form-urlencoded", strings.NewReader(payload.Encode()))
 
 	if err != nil {
@@ -222,6 +231,8 @@ func (as *AvalonService) submitReservation(session *http.Client, payload url.Val
 		util.LogError(as.Logger, err)
 		return err
 	}
+
+	util.LogInfo(as.Logger, "Request has been posted successfully. Confirming request was accepted...")
 
 	return err
 }
@@ -257,7 +268,7 @@ func (as *AvalonService) validateReservation(rsvp *model.Reservation, session *h
 		return nil
 	}
 
-	return errors.New("unable to confirm reservation")
+	return errors.New("failed to confirm reservation")
 }
 
 func getUpcomingReservationAmenityDetails(node *html.Node) string {

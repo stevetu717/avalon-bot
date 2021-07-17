@@ -7,7 +7,7 @@ const (
 
 	// SMS
 	SmsHelp   = "To use this system please message in the format: <activity> mm/dd/yy hh:mm <am/pm>. Example: tennis1 2/12/21 8:00pm. " +
-		"Valid activities: racquetball, basketball, tennis1, tennis2."
+		"Valid activities: racquetball, basketball, tennis1, tennis2. Only 1 reservation per activity per day will work."
 	SmsInvalidDateTime = "Please enter a date and time in the correct format. Text 'assist' for help."
 	SmsInvalidDateTimeRange = "Amenities are only open between 8AM and 8PM EST. Please try again with a valid time."
 	SmsInvalidActivity = "Please enter a valid activity you would like to schedule. Text 'assist' for help."

@@ -193,7 +193,7 @@ func (sms *SMSHandler) sendSMS(message string, userPhoneNumber string) error {
 }
 
 func (sms *SMSHandler) ScheduleJob(r *model.Reservation, collection *mongo.Collection, avalonService *AvalonService) {
-	duration := util.TimeFromNow(r.Datetime)
+	duration := util.DurationUntilSchedulable(r.Datetime)
 	timer := time.NewTimer(duration)
 	util.LogInfo(sms.logger, "Will attempt to make Reservation "+r.Id.Hex()+" on Avalon.com at "+time.Now().In(util.Loc).Add(duration).String())
 

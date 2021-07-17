@@ -113,7 +113,9 @@ func validateDB(ctx context.Context, collection *mongo.Collection, logger *logru
 
 func initLogger() *logrus.Logger {
 	logger := logrus.New()
-	logger.SetFormatter(&logrus.JSONFormatter{})
+	formatter := &logrus.JSONFormatter{}
+	formatter.TimestampFormat = "2006-01-02 15:04:05.000"
+	logger.SetFormatter(formatter)
 	return logger
 }
 
